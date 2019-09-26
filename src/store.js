@@ -5,11 +5,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-
+    todos: [{
+      text: 'ela',
+    }],
   },
-  mutations: {
-
+  getters: {
+    allTodos: state => state.todos,
   },
+  mutations: {},
   actions: {
 
   },
