@@ -1,15 +1,22 @@
 <template>
-  <div class="home">{{allTodos}}</div>
+  <div class="home">
+    <div v-for="todo in allTodos" :key="todo.id">{{todo.title}}</div>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: 'home',
-  components: {
+  name: "home",
+  components: {},
+  methods: {
+    ...mapActions(["fetchAllTodos"])
   },
-  computed: mapGetters(['allTodos']),
+  computed: mapGetters(["allTodos"]),
+  created() {
+    this.fetchAllTodos();
+  }
 };
 </script>
