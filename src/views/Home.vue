@@ -1,16 +1,19 @@
 <template>
   <div class="home">
-    <div v-for="todo in allTodos" :key="todo.id">{{todo.title}}</div>
+    <Todo v-for="todo in allTodos" :key="todo.id" :id="todo.id" :title="todo.title" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from "vuex";
+import Todo from '../components/Todo';
 
 export default {
   name: "home",
-  components: {},
+  components: {
+	  Todo
+  },
   methods: {
     ...mapActions(["fetchAllTodos"])
   },
