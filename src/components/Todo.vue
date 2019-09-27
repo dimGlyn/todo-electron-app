@@ -1,6 +1,11 @@
 <template>
   <div>
-    <input v-model="inputText" type="text" @keydown.enter="updateTodo" />
+    <input
+      v-model="inputText"
+      type="text"
+      @keydown.enter="handleSubmit"
+      :placeholder="title ? '' : placeholder"
+    />
   </div>
 </template>
 
@@ -9,7 +14,9 @@ export default {
   name: "todo",
   props: {
     title: String,
-    id: Number
+    id: Number,
+    add: Boolean,
+    placeholder: String
   },
   data() {
     let inputText = this.title;
@@ -18,8 +25,18 @@ export default {
     };
   },
   methods: {
-    updateTodo(e) {
-      console.log(e.code === "Enter");
+    handleSubmit(e) {
+      if (e.target.value.trim() === "") {
+        alert("Can not add empty todo");
+      } else {
+        if (this.add) {
+          this.$emit("addTodo", e.target.value);
+          this.clearInput();
+        }
+      }
+    },
+    clearInput() {
+      this.inputText = "";
     }
   },
   computed: {},
@@ -39,10 +56,10 @@ input {
   height: 50px;
   width: 100%;
   padding: 10px;
-  color: aqua;
+  color: #f8bb39;
 }
 input:focus {
   outline: 0;
-  background-color: cadetblue
+  background-color: #db784d55;
 }
 </style>
