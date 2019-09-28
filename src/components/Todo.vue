@@ -35,9 +35,8 @@ export default {
   methods: {
     ...mapActions(['addTodo', 'editTodo', 'deleteTodo']),
     handleSubmit(e) {
-      if (e.target.value.trim() === "") {
-        alert("Can not add empty todo");
-      } else if (this.add) {
+      if (e.target.value.trim() === "") return
+      else if (this.add) {
         this.addTodo(e.target.value);
         this.clearInput();
       } else {

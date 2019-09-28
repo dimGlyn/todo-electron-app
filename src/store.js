@@ -11,9 +11,7 @@ const baseUrl = 'https://jsonplaceholder.typicode.com';
 
 export default new Vuex.Store({
 	state: {
-		todos: [{
-			title: 'ela',
-		}],
+		todos: [],
 	},
 	getters: {
 		allTodos: state => state.todos,
