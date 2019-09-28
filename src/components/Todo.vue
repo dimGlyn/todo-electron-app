@@ -4,8 +4,9 @@
       v-model="inputText"
       type="text"
       @keydown.enter="handleSubmit"
-	  @keydown.up="pressed($event, 'up')"
-	  @keydown.down="pressed($event, 'down')"
+	  @keydown.up="navigate($event, 'up')"
+	  @keydown.down="navigate($event, 'down')"
+	  @keydown.x="removeTodo"
       :placeholder="title ? '' : placeholder"
 	  :ref="id"
     />
@@ -32,7 +33,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addTodo", "editTodo"]),
+    ...mapActions(['addTodo', 'editTodo', 'deleteTodo']),
     handleSubmit(e) {
       if (e.target.value.trim() === "") {
         alert("Can not add empty todo");
@@ -43,7 +44,12 @@ export default {
         this.editTodo({id: this.id, newTitle: e.target.value});
       }
 	},
-	pressed(e, direction) {
+	removeTodo(e) {
+	  if(e.ctrlKey) {
+		this.deleteTodo(this.id);
+	  }
+	},
+	navigate(e, direction) {
 	  if(this.refId === -1) {
 		this.$emit('focusOut', e, direction==='up' ? this.allTodos.length - 1 : 0);
 	  } else if (this.refId === this.allTodos.length - 1) {
