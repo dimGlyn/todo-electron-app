@@ -19,9 +19,7 @@ export default new Vuex.Store({
 		allTodos: state => state.todos,
 	},
 	actions: {
-		fetchAllTodos: async ({
-			commit
-		}) => {
+		fetchAllTodos: async ({ commit }) => {
 			const results = await axios.get(`${baseUrl}/todos`);
 			commit('setAllTodos', results.data);
 		},

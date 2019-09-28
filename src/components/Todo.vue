@@ -4,13 +4,17 @@
       v-model="inputText"
       type="text"
       @keydown.enter="handleSubmit"
+	  @keydown.up="pressed($event, 'up')"
+	  @keydown.down="pressed($event, 'down')"
       :placeholder="title ? '' : placeholder"
+	  :ref="id"
     />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { emit } from 'cluster';
 
 export default {
   name: "todo",
@@ -18,7 +22,8 @@ export default {
     title: String,
     id: Number,
     add: Boolean,
-    placeholder: String
+	placeholder: String,
+	refId: Number
   },
   data() {
 	let inputText = this.title;
@@ -37,12 +42,23 @@ export default {
       } else {
         this.editTodo({id: this.id, newTitle: e.target.value});
       }
-    },
+	},
+	pressed(e, direction) {
+	  if(this.refId === -1) {
+		this.$emit('focusOut', e, direction==='up' ? this.allTodos.length - 1 : 0);
+	  } else if (this.refId === this.allTodos.length - 1) {
+		this.$emit('focusOut', e, direction==='up' ? this.refId - 1 : -1);
+	  } else {
+		this.$emit('focusOut', e, direction==='up' ? this.refId - 1 : this.refId + 1);
+	  }
+	},
     clearInput() {
       this.inputText = "";
     },
   },
-  computed: {},
+  computed: {
+	...mapGetters(['allTodos'])
+  },
   watch: {
     title(newTitle) {
       this.inputText = newTitle;

@@ -1,22 +1,44 @@
 <template>
   <div class="home">
-    <Todo class="add-todo" :placeholder="`Add Todo...`" :add="true" />
-    <Todo v-for="todo in allTodos" :key="todo.id" :id="todo.id" :title="todo.title" />
+    <Todo
+      ref="addTodo"
+	  :refId="-1"
+      class="add-todo"
+      :placeholder="`Add Todo...`"
+      :add="true"
+      @focusOut="setFocus"
+    />
+    <Todo
+      v-for="(todo, index) in allTodos"
+      :key="index"
+      :refId="index"
+      :ref="index"
+      :id="todo.id"
+      :title="todo.title"
+      @focusOut="setFocus"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from "vuex";
-import Todo from '../components/Todo';
+import Todo from "../components/Todo";
 
 export default {
   name: "home",
   components: {
-	  Todo,
+    Todo
   },
   methods: {
-    ...mapActions(["fetchAllTodos"])
+    ...mapActions(["fetchAllTodos"]),
+    setFocus(e, ref) {
+      if (ref === -1) {
+        this.$refs.addTodo.$el.children[0].focus();
+      } else {
+        this.$refs[ref][0].$el.children[0].focus();
+      }
+    }
   },
   computed: mapGetters(["allTodos"]),
   created() {
@@ -29,5 +51,4 @@ export default {
 .home {
   background-color: #12100f;
 }
-
 </style>
