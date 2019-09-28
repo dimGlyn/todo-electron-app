@@ -26,13 +26,19 @@ export default new Vuex.Store({
 			commit('setAllTodos', results.data);
 		},
 		addTodo: async ({ commit }, title) => commit('addTodo', title),
+		editTodo: async ({commit}, {id, newTitle}) => commit('editTodo', {id, newTitle}),
 	},
 	mutations: {
 		setAllTodos: async (state, todos) => state.todos = todos,
 		addTodo: async (state, title) => {
 			state.todos.unshift({
-				title
+				title,
+				id: state.todos.length + 1
 			})
+		},
+		editTodo: async (state, {id, newTitle}) => {
+			const index = state.todos.findIndex(todo => +todo.id === +id);
+			state.todos[index].title = newTitle;
 		}
 	},
 });

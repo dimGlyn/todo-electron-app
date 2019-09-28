@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-	<AddTodo class="add-todo" />
+    <Todo class="add-todo" :placeholder="`Add Todo...`" :add="true" />
     <Todo v-for="todo in allTodos" :key="todo.id" :id="todo.id" :title="todo.title" />
   </div>
 </template>
@@ -9,13 +9,11 @@
 // @ is an alias to /src
 import { mapGetters, mapActions } from "vuex";
 import Todo from '../components/Todo';
-import AddTodo from '../components/AddTodo';
 
 export default {
   name: "home",
   components: {
 	  Todo,
-	  AddTodo
   },
   methods: {
     ...mapActions(["fetchAllTodos"])

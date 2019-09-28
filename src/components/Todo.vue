@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: "todo",
   props: {
@@ -19,30 +21,31 @@ export default {
     placeholder: String
   },
   data() {
-    let inputText = this.title;
+	let inputText = this.title;
     return {
-      inputText
+	  inputText,
     };
   },
   methods: {
+    ...mapActions(["addTodo", "editTodo"]),
     handleSubmit(e) {
       if (e.target.value.trim() === "") {
         alert("Can not add empty todo");
+      } else if (this.add) {
+        this.addTodo(e.target.value);
+        this.clearInput();
       } else {
-        if (this.add) {
-          this.$emit("addTodo", e.target.value);
-          this.clearInput();
-        }
+        this.editTodo({id: this.id, newTitle: e.target.value});
       }
     },
     clearInput() {
       this.inputText = "";
-    }
+    },
   },
   computed: {},
   watch: {
-	title(newTitle) {
-	  this.inputText = newTitle
+    title(newTitle) {
+      this.inputText = newTitle;
     }
   }
 };
