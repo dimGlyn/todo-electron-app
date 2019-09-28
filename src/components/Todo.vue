@@ -40,7 +40,11 @@ export default {
     }
   },
   computed: {},
-  watch: {}
+  watch: {
+	title(newTitle) {
+	  this.inputText = newTitle
+    }
+  }
 };
 </script>
 
