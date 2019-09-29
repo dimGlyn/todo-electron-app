@@ -14,6 +14,7 @@ export default new Vuex.Store({
 	actions: {
 		fetchAllTodos: async ({ commit }) => {
 			const todos = await todoHelper.getTodos();
+			todos.reverse();
 			commit('setAllTodos', todos);
 		},
 		addTodo: async ({ commit }, title) => commit('addTodo', title),
@@ -32,12 +33,14 @@ export default new Vuex.Store({
 			state.todos[index].title = newTitle;
 		},
 		deleteTodo: async (state, id) => {
-			console.log(id)
 			state.todos = state.todos.filter(todo => todo.id !== id)
 		},
 		setTodoDone: async (state, { id, flag }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
-			state.todos[index].done = flag;
+			const result = await todoHelper.markDone(id);
+			if(result === 1) {
+				state.todos[index].done = flag;
+			}
 		},
 	},
 });

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { async } from 'q';
 
 const baseUrl = 'http://localhost:8080';
 
@@ -26,5 +27,10 @@ export default {
 			done: newTodo.done
 		} = result.data);
 		return newTodo;
+	},
+	markDone: async (id) => {
+		const result = await axios.put(`${baseUrl}/todos/${id}/done/`);
+		if(result.data.done) return 1
+		else  return 0;
 	}
 }

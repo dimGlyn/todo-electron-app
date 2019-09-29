@@ -28,7 +28,7 @@ export default {
   },
   data() {
 	let inputText = this.todo ? this.todo.title : '';
-	let done = this.done;
+	let done = this.todo ? this.todo.done : false;
     return {
 	  inputText,
 	  done
@@ -78,7 +78,10 @@ export default {
   watch: {
     "todo.title"(newTitle) {
       this.inputText = newTitle;
-    }
+	},
+	"todo.done"(newDone) {
+		this.done = newDone;
+	}
   }
 };
 </script>
