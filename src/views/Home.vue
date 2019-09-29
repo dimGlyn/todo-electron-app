@@ -10,12 +10,10 @@
     />
     <Todo
       v-for="(todo, index) in allTodos"
+	  :todo="todo"
       :key="index"
       :refId="index"
       :ref="index"
-      :id="todo.id"
-      :title="todo.title"
-	  :done="todo.done"
       @focusOut="setFocus"
     />
   </div>

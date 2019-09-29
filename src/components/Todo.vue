@@ -9,8 +9,7 @@
 	  @keydown.down="navigate($event, 'down')"
 	  @keydown.x="removeTodo"
 	  @keydown.d="crossTodo"
-      :placeholder="title ? '' : placeholder"
-	  :ref="id"
+      :placeholder="todo ? '' : placeholder"
     />
   </div>
 </template>
@@ -22,17 +21,17 @@ import { emit } from 'cluster';
 export default {
   name: "todo",
   props: {
-    title: String,
-    id: Number,
+	todo: Object,
     add: Boolean,
 	placeholder: String,
 	refId: Number,
-	done: Boolean
   },
   data() {
-	let inputText = this.title;
+	let inputText = this.todo ? this.todo.title : '';
+	let done = this.done;
     return {
 	  inputText,
+	  done
     };
   },
   methods: {
@@ -43,21 +42,21 @@ export default {
         this.addTodo(e.target.value);
         this.clearInput();
       } else {
-        this.editTodo({id: this.id, newTitle: e.target.value});
+        this.editTodo({id: this.todo.id, newTitle: e.target.value});
       }
 	},
 	removeTodo(e) {
-	  if(e.ctrlKey) {
-		this.deleteTodo(this.id);
+	  if(e.ctrlKey && !this.add) {
+		this.deleteTodo(+this.todo.id);
 	  }
 	},
 	crossTodo(e) {
-		if(e.ctrlKey && this.done !== true) {
+		if(e.ctrlKey && this.done !== true && !this.add) {
 			this.done = true;
-			this.setTodoDone({ id: this.id });
-		} else if(e.ctrlKey && this.done === true) {
+			this.setTodoDone({ id: this.todo.id });
+		} else if(e.ctrlKey && this.done === true && !this.add) {
 			this.done = false;
-			this.setTodoDone({ id: this.id, flag: false});
+			this.setTodoDone({ id: this.todo.id, flag: false});
 		}
 	},
 	navigate(e, direction) {
@@ -77,7 +76,7 @@ export default {
 	...mapGetters(['allTodos'])
   },
   watch: {
-    title(newTitle) {
+    "todo.title"(newTitle) {
       this.inputText = newTitle;
     }
   }
