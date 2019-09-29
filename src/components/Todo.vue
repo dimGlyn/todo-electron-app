@@ -3,10 +3,12 @@
     <input
       v-model="inputText"
       type="text"
+	  :class="done ? 'done' : ''"
       @keydown.enter="handleSubmit"
 	  @keydown.up="navigate($event, 'up')"
 	  @keydown.down="navigate($event, 'down')"
 	  @keydown.x="removeTodo"
+	  @keydown.d="crossTodo"
       :placeholder="title ? '' : placeholder"
 	  :ref="id"
     />
@@ -24,7 +26,8 @@ export default {
     id: Number,
     add: Boolean,
 	placeholder: String,
-	refId: Number
+	refId: Number,
+	done: Boolean
   },
   data() {
 	let inputText = this.title;
@@ -33,7 +36,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['addTodo', 'editTodo', 'deleteTodo']),
+    ...mapActions(['addTodo', 'editTodo', 'deleteTodo', 'setTodoDone']),
     handleSubmit(e) {
       if (e.target.value.trim() === "") return
       else if (this.add) {
@@ -47,6 +50,15 @@ export default {
 	  if(e.ctrlKey) {
 		this.deleteTodo(this.id);
 	  }
+	},
+	crossTodo(e) {
+		if(e.ctrlKey && this.done !== true) {
+			this.done = true;
+			this.setTodoDone({ id: this.id });
+		} else if(e.ctrlKey && this.done === true) {
+			this.done = false;
+			this.setTodoDone({ id: this.id, flag: false});
+		}
 	},
 	navigate(e, direction) {
 	  if(this.refId === -1) {
@@ -89,5 +101,8 @@ input {
 input:focus {
   outline: 0;
   background-color: #db784d55;
+}
+.done {
+	text-decoration: line-through;
 }
 </style>

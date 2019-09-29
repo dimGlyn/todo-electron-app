@@ -15,6 +15,7 @@
       :ref="index"
       :id="todo.id"
       :title="todo.title"
+	  :done="todo.done"
       @focusOut="setFocus"
     />
   </div>

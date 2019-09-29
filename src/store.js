@@ -22,8 +22,9 @@ export default new Vuex.Store({
 			commit('setAllTodos', results.data);
 		},
 		addTodo: async ({ commit }, title) => commit('addTodo', title),
-		editTodo: async ({ commit }, {id, newTitle}) => commit('editTodo', {id, newTitle}),
+		editTodo: async ({ commit }, { id, newTitle }) => commit('editTodo', { id, newTitle }),
 		deleteTodo: async ({ commit }, id) => commit('deleteTodo', id),
+		setTodoDone: async ({ commit }, {id, flag = true}) => commit('setTodoDone', {id, flag}),
 	},
 	mutations: {
 		setAllTodos: async (state, todos) => state.todos = todos,
@@ -33,12 +34,19 @@ export default new Vuex.Store({
 				id: state.todos.length + 1
 			})
 		},
-		editTodo: async (state, {id, newTitle}) => {
+		editTodo: async (state, {
+			id,
+			newTitle
+		}) => {
 			const index = state.todos.findIndex(todo => +todo.id === +id);
 			state.todos[index].title = newTitle;
 		},
 		deleteTodo: async (state, id) => {
 			state.todos = state.todos.filter(todo => todo.id !== id)
-		}
+		},
+		setTodoDone: async (state, { id, flag }) => {
+			const index = state.todos.findIndex(todo => +todo.id === +id);
+			state.todos[index].done = flag;
+		},
 	},
 });
