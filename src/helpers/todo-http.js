@@ -32,5 +32,10 @@ export default {
 		const result = await axios.put(`${baseUrl}/todos/${id}/done/`);
 		if(result.data.done) return 1
 		else  return 0;
+	},
+	markUndone: async (id) => {
+		const result = await axios.put(`${baseUrl}/todos/${id}/undone/`);
+		if(!result.data.done) return 1
+		else  return 0;
 	}
 }

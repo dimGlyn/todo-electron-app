@@ -17,16 +17,30 @@ export default new Vuex.Store({
 			todos.reverse();
 			commit('setAllTodos', todos);
 		},
-		addTodo: async ({ commit }, title) => commit('addTodo', title),
-		editTodo: async ({ commit }, { id, newTitle }) => commit('editTodo', { id, newTitle }),
+		addTodo: async ({ commit }, title) => {
+			const newTodo = await todoHelper.addTodo({title});
+			commit('addTodo', newTodo)
+		},
+		editTodo: async ({ commit }, { id, newTitle }) => {
+			commit('editTodo', { id, newTitle })
+		},
 		deleteTodo: async ({ commit }, id) => commit('deleteTodo', id),
-		setTodoDone: async ({ commit }, {id, flag = true}) => commit('setTodoDone', {id, flag}),
+		setTodoDone: async ({ commit }, {id, flag = true}) => {
+			let result;
+			if (flag) {
+				result = await todoHelper.markDone(id);
+			} else {
+				result = await todoHelper.markUndone(id);
+			}
+			if(result === 1) {
+				commit('setTodoDone', {id, flag});
+			}
+		},
 	},
 	mutations: {
 		setAllTodos: async (state, todos) => state.todos = todos,
-		addTodo: async (state, title) => {
-			const newTodo = await todoHelper.addTodo({title});
-			state.todos.unshift(newTodo);
+		addTodo: async (state, todo) => {
+			state.todos.unshift(todo);
 		},
 		editTodo: async (state, { id, newTitle }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
@@ -37,10 +51,7 @@ export default new Vuex.Store({
 		},
 		setTodoDone: async (state, { id, flag }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
-			const result = await todoHelper.markDone(id);
-			if(result === 1) {
-				state.todos[index].done = flag;
-			}
+			state.todos[index].done = flag;
 		},
 	},
 });
