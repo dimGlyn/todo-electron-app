@@ -47,7 +47,7 @@ export default {
 	},
 	removeTodo(e) {
 	  if(e.ctrlKey && !this.add) {
-		this.deleteTodo(+this.todo.id);
+		this.deleteTodo(this.todo.id);
 	  }
 	},
 	crossTodo(e) {

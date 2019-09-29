@@ -1,13 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
-import {
-	async
-} from 'q';
+import todoHelper from './helpers/todo-http';
 
 Vue.use(Vuex);
-
-const baseUrl = 'http://localhost:8080';
 
 export default new Vuex.Store({
 	state: {
@@ -18,12 +13,7 @@ export default new Vuex.Store({
 	},
 	actions: {
 		fetchAllTodos: async ({ commit }) => {
-			const results = await axios.get(`${baseUrl}/todos/`);
-			const todos = results.data.map(todo => ({
-				title: todo.text,
-				id: todo._id,
-				done: todo.done
-			}));
+			const todos = await todoHelper.getTodos();
 			commit('setAllTodos', todos);
 		},
 		addTodo: async ({ commit }, title) => commit('addTodo', title),
@@ -44,6 +34,7 @@ export default new Vuex.Store({
 			state.todos[index].title = newTitle;
 		},
 		deleteTodo: async (state, id) => {
+			console.log(id)
 			state.todos = state.todos.filter(todo => todo.id !== id)
 		},
 		setTodoDone: async (state, { id, flag }) => {
