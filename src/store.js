@@ -24,10 +24,8 @@ export default new Vuex.Store({
 	mutations: {
 		setAllTodos: async (state, todos) => state.todos = todos,
 		addTodo: async (state, title) => {
-			state.todos.unshift({
-				title,
-				id: state.todos.length + 1
-			})
+			const newTodo = await todoHelper.addTodo({title});
+			state.todos.unshift(newTodo);
 		},
 		editTodo: async (state, { id, newTitle }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);

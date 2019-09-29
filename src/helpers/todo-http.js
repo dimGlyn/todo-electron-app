@@ -11,5 +11,20 @@ export default {
 			done: todo.done
 		}));
 		return todos;
+	},
+	addTodo: async (todo) => {
+		const result = await axios.post(`${baseUrl}/todos/`, {
+			text: todo.title,
+			...todo
+		});
+		let newTodo = {};
+		({
+			text: newTodo.title,
+			dueDate: newTodo.dueDate,
+			tags: newTodo.tags,
+			_id: newTodo.id,
+			done: newTodo.done
+		} = result.data);
+		return newTodo;
 	}
 }
