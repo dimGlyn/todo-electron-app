@@ -22,7 +22,8 @@ export default new Vuex.Store({
 			commit('addTodo', newTodo)
 		},
 		editTodo: async ({ commit }, { id, newTitle }) => {
-			commit('editTodo', { id, newTitle })
+			const updatedTodo = await todoHelper.editTodo(id, {title: newTitle})
+			commit('editTodo', { id, updatedTodo })
 		},
 		deleteTodo: async ({ commit }, id) => commit('deleteTodo', id),
 		setTodoDone: async ({ commit }, {id, flag = true}) => {
@@ -42,9 +43,9 @@ export default new Vuex.Store({
 		addTodo: (state, todo) => {
 			state.todos.unshift(todo);
 		},
-		editTodo: (state, { id, newTitle }) => {
+		editTodo: (state, { id, updatedTodo }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
-			state.todos[index].title = newTitle;
+			state.todos[index] = {...updatedTodo};
 		},
 		deleteTodo: (state, id) => {
 			state.todos = state.todos.filter(todo => todo.id !== id)
