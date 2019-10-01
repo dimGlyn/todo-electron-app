@@ -25,7 +25,12 @@ export default new Vuex.Store({
 			const updatedTodo = await todoHelper.editTodo(id, {title: newTitle})
 			commit('editTodo', { id, updatedTodo })
 		},
-		deleteTodo: async ({ commit }, id) => commit('deleteTodo', id),
+		deleteTodo: async ({ commit }, id) => {
+			const {ok, deletedCount} = await todoHelper.deleteTodo(id);
+			if( ok === 1 && deletedCount === 1) {
+				commit('deleteTodo', id);
+			}
+		},
 		setTodoDone: async ({ commit }, {id, flag = true}) => {
 			let result;
 			if (flag) {

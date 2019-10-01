@@ -25,6 +25,10 @@ export default {
 		const updatedTodo = mapFromResponse(result.data);
 		return updatedTodo;
 	},
+	deleteTodo: async id => {
+		const result = await todoAxios.delete(`/todos/${id}/`);
+		return result.data;
+	},
 	markDone: async id => {
 		const result = await todoAxios.put(`/todos/${id}/done/`);
 		if (result.data.done) return 1
