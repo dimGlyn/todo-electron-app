@@ -38,18 +38,18 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
-		setAllTodos: async (state, todos) => state.todos = todos,
-		addTodo: async (state, todo) => {
+		setAllTodos: (state, todos) => state.todos = todos,
+		addTodo: (state, todo) => {
 			state.todos.unshift(todo);
 		},
-		editTodo: async (state, { id, newTitle }) => {
+		editTodo: (state, { id, newTitle }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
 			state.todos[index].title = newTitle;
 		},
-		deleteTodo: async (state, id) => {
+		deleteTodo: (state, id) => {
 			state.todos = state.todos.filter(todo => todo.id !== id)
 		},
-		setTodoDone: async (state, { id, flag }) => {
+		setTodoDone: (state, { id, flag }) => {
 			const index = state.todos.findIndex(todo => todo.id === id);
 			state.todos[index].done = flag;
 		},
