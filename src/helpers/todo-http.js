@@ -1,14 +1,28 @@
 import axios from 'axios';
-
-const baseURL = 'http://localhost:8080';
+import httpGQL from './http';
+const baseURL = 'http://localhost:4000';
 const todoAxios = axios.create({
 	baseURL
 });
 
 export default {
 	getTodos: async () => {
-		const results = await todoAxios.get('/todos/');
-		const todos = results.data.map(todo => ({
+		const getQuery = {
+			query: `
+				query getAllTodos {
+					todos {
+						id
+						text
+						done
+						dueDate
+					}
+				}
+			`
+		};
+
+		const results = await httpGQL(getQuery);
+
+		const todos = results.data.todos.map(todo => ({
 			title: todo.text,
 			id: todo._id,
 			done: todo.done
@@ -16,6 +30,18 @@ export default {
 		return todos;
 	},
 	addTodo: async todo => {
+		const getQuery = {
+			query: `
+				query AddTodo {
+					createTodo {
+						id
+						text
+						done
+						dueDate
+					}
+				}
+			`
+		};
 		const result = await todoAxios.post('/todos/', mapForRequest(todo));
 		const newTodo = mapFromResponse(result.data);
 		return newTodo;
